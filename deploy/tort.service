@@ -1,0 +1,15 @@
+[Unit]
+Description=online
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/var/www/online/yozib_turamiz
+ExecStart=/var/www/online/yozib_turamiz/main
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/www/online/yozib_turamiz/bot.log
+StandardError=append:/var/www/online/yozib_turamiz/bot.err
+
+[Install]
+WantedBy=multi-user.target
