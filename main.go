@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// Bot token
 	bot, err := tgbotapi.NewBotAPI("8450193713:AAE_zTPT-Awxh_k_SMpp9dqYstmRj-VfyRw")
 	if err != nil {
 		log.Panic(err)
@@ -15,29 +16,25 @@ func main() {
 	bot.Debug = true
 	log.Printf("Bot authorized on account %s", bot.Self.UserName)
 
+	// Ruxsat berilgan kanal
 	allowedChannels := map[int64]bool{
-		-1002983106840: true,
+		-1002983106840: true, // Shu yerga kanal ID
 	}
 
 	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
 	updates := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		if update.Message != nil {
 			chatID := update.Message.Chat.ID
 
+			// Faqat ruxsat berilgan kanallarga javob beradi
 			if allowedChannels[chatID] {
-				// Bot foydalanuvchi xabariga javob beradi
-				msg := tgbotapi.NewMessage(chatID, update.Message.Text)
+				// Foydalanuvchi yozgan xabarni shunchaki reply qiladi
+				msgText := update.Message.Text
+				msg := tgbotapi.NewMessage(chatID, msgText)
 				msg.ReplyToMessageID = update.Message.MessageID
-
-				// Xabarni yuborish
-				_, err := bot.Send(msg)
-				if err != nil {
-					log.Println("Send error:", err)
-				}
-				// Hech qachon o'chirmaydi
+				bot.Send(msg)
 			}
 		}
 	}
