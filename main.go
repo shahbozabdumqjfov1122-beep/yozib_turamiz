@@ -21,6 +21,7 @@ func main() {
 	}
 
 	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
 	updates := bot.GetUpdatesChan(u)
 
 	for update := range updates {
@@ -28,17 +29,18 @@ func main() {
 			chatID := update.Message.Chat.ID
 
 			if allowedChannels[chatID] {
-				// Bot foydalanuvchi xabarini reply qiladi
+				// Bot foydalanuvchi xabariga javob beradi
 				msg := tgbotapi.NewMessage(chatID, update.Message.Text)
 				msg.ReplyToMessageID = update.Message.MessageID
 
+				// Xabarni yuborish
 				sentMsg, err := bot.Send(msg)
 				if err != nil {
 					log.Println("Send error:", err)
 					continue
 				}
 
-				// 5 soniya keyin bot o'z xabarini o'chiradi
+				// 5 soniya keyin faqat botning o'z xabarini o'chirish
 				go func(chatID int64, messageID int) {
 					time.Sleep(5 * time.Second)
 					delMsg := tgbotapi.DeleteMessageConfig{
