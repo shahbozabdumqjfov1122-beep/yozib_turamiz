@@ -27,7 +27,6 @@ func main() {
 			chatID := update.Message.Chat.ID
 
 			if allowedChannels[chatID] {
-				// Bot foydalanuvchi xabarini reply qiladi
 				msg := tgbotapi.NewMessage(chatID, update.Message.Text)
 				msg.ReplyToMessageID = update.Message.MessageID
 
